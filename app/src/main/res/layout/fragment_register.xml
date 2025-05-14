@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#1F1B24"
+    tools:context=".fragments.RegisterFragment">
+
+    <TextView
+        android:id="@+id/textViewReg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_weight="0.3"
+        android:text="Registration"
+        android:textColor="#FFFF"
+        android:textSize="32sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/editTextEmailAddressReg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.3"
+        android:ems="10"
+        android:hint="Email"
+        android:textSize="20sp"
+        android:textColorHint="#99FFFFFF"
+        android:textColor="#FFFF"
+        android:inputType="textEmailAddress" />
+
+    <EditText
+        android:id="@+id/editTextPasswordReg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.3"
+        android:ems="10"
+        android:hint="Password"
+        android:textColorHint="#99FFFFFF"
+        android:textColor="#FFFF"
+        android:textSize="20sp"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/editTextPasswordConfirmationReg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.3"
+        android:ems="10"
+        android:hint="Confirm Password"
+        android:textColorHint="#99FFFFFF"
+        android:textColor="#FFFF"
+        android:textSize="20sp"
+        android:inputType="textPassword" />
+
+    <EditText
+        android:id="@+id/editTextPhoneReg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.3"
+        android:ems="10"
+        android:hint="Phone #"
+        android:textColorHint="#99FFFFFF"
+        android:textColor="#FFFF"
+        android:textSize="20sp"
+        android:inputType="phone" />
+
+    <Button
+        android:id="@+id/buttonRegister"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:layout_marginBottom="30dp"
+        android:padding="20dp"
+        android:text="Register"
+        android:textColorLink="#BB86FC" />
+</LinearLayout>

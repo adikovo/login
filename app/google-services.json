@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "342374569411",
+    "project_id": "loginproject-fc9e2",
+    "storage_bucket": "loginproject-fc9e2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:342374569411:android:39a0d4f5be5e6ee8c19976",
+        "android_client_info": {
+          "package_name": "com.example.ex2login"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAd7PtXA7M1onUP_M8BRTVV7H1_4aTAQs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

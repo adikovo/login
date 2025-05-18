@@ -1,19 +1,16 @@
 package com.example.ex2login.fragments;
 
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-
 import com.example.ex2login.MainActivity;
 import com.example.ex2login.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,7 +26,15 @@ public class RegisterFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private String mParam1;
+
     private String mParam2;
+
+    private FirebaseDatabase database;
+    private DatabaseReference usersRef;
+    private EditText usernameInput;
+    private EditText passwordInput;
+    private EditText passwordConfInput;
+    private EditText phoneInput;
 
     public RegisterFragment() {
         // Required empty public constructor
@@ -60,29 +65,31 @@ public class RegisterFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        database = FirebaseDatabase.getInstance();
+        usersRef = database.getReference("users");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_register, container, false);
+        View view = inflater.inflate(R.layout.fragment_register, container, false);
+        
         Button buttonReg = view.findViewById(R.id.buttonRegister);
-        EditText emailInput = view.findViewById(R.id.editTextEmailAddressReg);
-        EditText passwordInput = view.findViewById(R.id.editTextPasswordReg);
-        EditText passwordConfInput = view.findViewById(R.id.editTextPasswordConfirmationReg);
-        EditText phoneInput = view.findViewById(R.id.editTextPhoneReg);
+        usernameInput = view.findViewById(R.id.editTextEmailAddressReg);
+        passwordInput = view.findViewById(R.id.editTextPasswordReg);
+        passwordConfInput = view.findViewById(R.id.editTextPasswordConfirmationReg);
+        phoneInput = view.findViewById(R.id.editTextPhoneReg);
 
         buttonReg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = emailInput.getText().toString();
+                String username = usernameInput.getText().toString().trim();
                 String password = passwordInput.getText().toString();
                 String passwordConf = passwordConfInput.getText().toString();
-                String phone = phoneInput.getText().toString();
+                String phone = phoneInput.getText().toString().trim();
 
-                if(email.isEmpty()){
-                    emailInput.setError("Email is required");
+                if(username.isEmpty()){
+                    usernameInput.setError("Username is required");
                     return;
                 }
 
@@ -102,17 +109,14 @@ public class RegisterFragment extends Fragment {
                 }
 
                 if(phone.isEmpty()){
-                    phoneInput.setError("phone number is required!");
+                    phoneInput.setError("Phone number is required!");
                     return;
                 }
+
                 MainActivity mainActivity = (MainActivity) getActivity();
-                mainActivity.register();
-                mainActivity.addData();
-
-
-                Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_lobbyFragment);
-
-
+                if(mainActivity != null) {
+                    mainActivity.register();
+                }
             }
         });
 

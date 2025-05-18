@@ -1,35 +1,28 @@
 package com.example.ex2login;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.navigation.Navigation;
 
-import com.example.ex2login.models.DataModel;
-import com.example.ex2login.models.Student;
+import com.example.ex2login.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
+    private FirebaseDatabase database;
+    private DatabaseReference usersRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,85 +35,84 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
         mAuth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+        usersRef = database.getReference("users");
     }
 
-    public void login(){
-
-        String email = ((EditText)findViewById(R.id.editTextTextEmailAddress)).getText().toString();
+    public void login() {
+        String username = ((EditText)findViewById(R.id.editTextTextEmailAddress)).getText().toString();
         String password = ((EditText)findViewById(R.id.editTextTextPassword)).getText().toString();
+
+        // Convert username to email format for Firebase Auth
+        String email = username + "@yourdomain.com";
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-
-                            Toast.makeText(MainActivity.this, "login ok", Toast.LENGTH_LONG).show();
-
+                            Toast.makeText(MainActivity.this, "Login successful!", Toast.LENGTH_LONG).show();
+                            // Only navigate if login is successful
+                            Navigation.findNavController(findViewById(R.id.fragmentContainerView2))
+                                    .navigate(R.id.action_lobbyFragment_to_cartFragment);
                         } else {
-
-                            Toast.makeText(MainActivity.this, "login fail", Toast.LENGTH_LONG).show();
-
+                            String errorMessage = task.getException() != null ? 
+                                task.getException().getMessage() : "Login failed";
+                            Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                         }
                     }
                 });
-
     }
 
-    public void register(){
+    public void register() {
+        String username = ((EditText)findViewById(R.id.editTextEmailAddressReg)).getText().toString();
+        String password = ((EditText)findViewById(R.id.editTextPasswordReg)).getText().toString();
+        String passwordConf = ((EditText)findViewById(R.id.editTextPasswordConfirmationReg)).getText().toString();
+        String phone = ((EditText)findViewById(R.id.editTextPhoneReg)).getText().toString();
 
-        String email = ((EditText)findViewById(R.id.editTextEmailAddressReg)).getText().toString();
-        String  password = ((EditText)findViewById(R.id.editTextPasswordReg)).getText().toString();
-//        String passwordConf = ((EditText)findViewById(R.id.editTextPasswordConfirmationReg)).getText().toString();
-//        String  phone = ((EditText)findViewById(R.id.editTextPhoneReg)).getText().toString();
+        // Check if passwords match
+        if (!password.equals(passwordConf)) {
+            Toast.makeText(MainActivity.this, "Passwords don't match!", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        // Convert username to email format for Firebase Auth
+        String email = username + "@yourdomain.com";
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Toast.makeText(MainActivity.this, "register ok", Toast.LENGTH_LONG).show();
+                            // Call addData and handle navigation based on its success/failure
+                            addData()
+                                .addOnSuccessListener(aVoid -> {
+                                    Toast.makeText(MainActivity.this, "Registration successful!", Toast.LENGTH_LONG).show();
+                                    Navigation.findNavController(findViewById(R.id.fragmentContainerView2))
+                                            .navigate(R.id.action_registerFragment_to_lobbyFragment);
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(MainActivity.this, "Failed to save user data: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                                    // If database save fails, delete the auth user
+                                    if (mAuth.getCurrentUser() != null) {
+                                        mAuth.getCurrentUser().delete();
+                                    }
+                                });
                         } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(MainActivity.this, "register fail", Toast.LENGTH_LONG).show();
+                            String errorMessage = task.getException() != null ? 
+                                task.getException().getMessage() : "Registration failed";
+                            Toast.makeText(MainActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                         }
                     }
                 });
     }
 
-    public void addData(){
-
+    public Task<Void> addData() {
+        String username = ((EditText) findViewById(R.id.editTextEmailAddressReg)).getText().toString();
         String phone = ((EditText) findViewById(R.id.editTextPhoneReg)).getText().toString();
-        String email = ((EditText) findViewById(R.id.editTextEmailAddressReg)).getText().toString();
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("users").child(phone);
-
-        Student s = new Student(email, phone);
-
-        myRef.setValue(s);
-    }
-
-    public void getStudent(String phone){
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("users").child(phone);
-        // Read from the database
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                Student value = dataSnapshot.getValue(Student.class);
-                //Toast.makeText(MainActivity.this, value.getEmail(), Toast.LENGTH_LONG).show();
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-            }
-        });
+        User user = new User(username, "", phone); // Not storing password in Realtime DB for security
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("users").child(username);
+        return myRef.setValue(user);
     }
 }

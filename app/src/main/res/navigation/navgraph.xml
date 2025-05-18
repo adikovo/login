@@ -14,14 +14,10 @@
             android:id="@+id/action_lobbyFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
         <action
-            android:id="@+id/action_lobbyFragment_to_calendarFragment"
-            app:destination="@id/calendarFragment" />
+            android:id="@+id/action_lobbyFragment_to_cartFragment"
+            app:destination="@id/cartFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/calendarFragment"
-        android:name="com.example.ex2login.fragments.CalendarFragment"
-        android:label="fragment_calendar"
-        tools:layout="@layout/fragment_calendar" />
+
     <fragment
         android:id="@+id/registerFragment"
         android:name="com.example.ex2login.fragments.RegisterFragment"
@@ -31,4 +27,11 @@
             android:id="@+id/action_registerFragment_to_lobbyFragment"
             app:destination="@id/lobbyFragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/cartFragment"
+        android:name="com.example.ex2login.fragments.CartFragment"
+        android:label="fragment_cart"
+        tools:layout="@layout/fragment_cart" />
+
 </navigation>

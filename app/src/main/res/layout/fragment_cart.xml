@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#1F1B24"
+    tools:context=".fragments.CartFragment">
+
+    <TextView
+        android:id="@+id/welcomeText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Welcome, User"
+        android:textSize="24sp"
+        android:textColor="#FFFFFF"
+        android:padding="16dp"
+        android:textStyle="bold"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="8dp"/>
+
+    <Button
+        android:id="@+id/buttonAddProduct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Product"
+        android:textColor="#FFFFFF"
+        android:layout_margin="8dp"
+        android:padding="16dp"
+        android:backgroundTint="#6200EE"/>
+
+    <Button
+        android:id="@+id/buttonRemoveProduct"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Remove Product"
+        android:textColor="#FFFFFF"
+        android:layout_margin="8dp"
+        android:padding="16dp"
+        android:backgroundTint="#018786"/>
+
+</LinearLayout> 

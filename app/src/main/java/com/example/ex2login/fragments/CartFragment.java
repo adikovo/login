@@ -41,7 +41,8 @@ public class CartFragment extends Fragment implements CustomeAdapter.OnProductLi
         // Initialize Firebase
         mAuth = FirebaseAuth.getInstance();
         String username = mAuth.getCurrentUser().getEmail().replace("@yourdomain.com", "");
-        userCartRef = FirebaseDatabase.getInstance().getReference("users").child(username).child("cart");
+        // Shared cart for all users
+        userCartRef = FirebaseDatabase.getInstance().getReference("shared_cart");
 
         // Initialize views
         welcomeText = view.findViewById(R.id.welcomeText);
